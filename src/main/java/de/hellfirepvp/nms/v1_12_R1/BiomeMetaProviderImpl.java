@@ -1,12 +1,13 @@
-package de.hellfirepvp.nms.v1_9_R1;
+package de.hellfirepvp.nms.v1_12_R1;
 
 import de.hellfirepvp.nms.BiomeMetaProvider;
 import de.hellfirepvp.nms.NMSReflector;
-import net.minecraft.server.v1_9_R1.BiomeBase;
-import net.minecraft.server.v1_9_R1.EntityInsentient;
-import net.minecraft.server.v1_9_R1.EntityTypes;
-import net.minecraft.server.v1_9_R1.EnumCreatureType;
-import net.minecraft.server.v1_9_R1.WeightedRandom;
+
+import net.minecraft.server.v1_12_R1.BiomeBase;
+import net.minecraft.server.v1_12_R1.EntityInsentient;
+import net.minecraft.server.v1_12_R1.EntityTypes;
+import net.minecraft.server.v1_12_R1.EnumCreatureType;
+import net.minecraft.server.v1_12_R1.WeightedRandom;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -18,23 +19,24 @@ import java.util.Map;
  * The plugin can be found at: https://www.spigotmc.org/resources/custommobs.7339
  * Class: BiomeMetaProviderImpl
  * Created by HellFirePvP
- * Date: 30.05.2016 / 08:51
+ * Date: 23.06.2016 / 16:23
  */
 public class BiomeMetaProviderImpl implements BiomeMetaProvider {
 
-    @Override
-    public List getBiomes() {
-        return new LinkedList<>(BiomeBase.i);
-    }
+//    @Override
+//    public List getBiomes() {
+//        return new LinkedList<>(BiomeBase.i);
+//    }
 
     @Override
-    public Map<String, Map<String, List<NMSBiomeMetaLink>>> getSortedBiomeMeta() {
-        Map<String, Map<String, List<NMSBiomeMetaLink>>> dataOutput = new HashMap<>();
-        for(BiomeBase base : new LinkedList<>(BiomeBase.i)) {
+    public Map<String, Map<String, List<BiomeMetaProvider.NMSBiomeMetaLink>>> getSortedBiomeMeta() {
+        Map<String, Map<String, List<BiomeMetaProvider.NMSBiomeMetaLink>>> dataOutput = new HashMap<>();
+		for (BiomeBase base : (Iterable<BiomeBase>) BiomeBase.i) {
+
             if(base == null) continue;
 
-            String name = base.l();
-            Map<String, List<NMSBiomeMetaLink>> specData = new HashMap<>();
+            String name = base.toString();
+            Map<String, List<BiomeMetaProvider.NMSBiomeMetaLink>> specData = new HashMap<>();
             for(EnumCreatureType type : EnumCreatureType.values()) {
                 if (type == null) continue;
 
@@ -46,8 +48,8 @@ public class BiomeMetaProviderImpl implements BiomeMetaProvider {
         return dataOutput;
     }
 
-    private List<NMSBiomeMetaLink> getNMSRepresentation(List metas) {
-        List<NMSBiomeMetaLink> biomeMetaLinks = new LinkedList<>();
+    private List<BiomeMetaProvider.NMSBiomeMetaLink> getNMSRepresentation(List metas) {
+        List<BiomeMetaProvider.NMSBiomeMetaLink> biomeMetaLinks = new LinkedList<>();
         for(Object objMeta : metas) {
             if(objMeta == null || !(objMeta instanceof BiomeBase.BiomeMeta)) continue;
 
@@ -55,7 +57,7 @@ public class BiomeMetaProviderImpl implements BiomeMetaProvider {
             int weightedChance = NMSReflector.getField("a", WeightedRandom.WeightedRandomChoice.class, meta, int.class);
             String typeStr = getEntityTypeString(meta.b);
             if(typeStr == null) continue;
-            biomeMetaLinks.add(new NMSBiomeMetaLink(weightedChance, meta.c, meta.d, typeStr));
+            biomeMetaLinks.add(new BiomeMetaProvider.NMSBiomeMetaLink(weightedChance, meta.c, meta.d, typeStr));
         }
         return biomeMetaLinks;
     }
@@ -75,14 +77,14 @@ public class BiomeMetaProviderImpl implements BiomeMetaProvider {
     }
 
     @Override
-    public boolean applyBiomeData(Map<String, Map<String, List<NMSBiomeMetaLink>>> data) {
+    public boolean applyBiomeData(Map<String, Map<String, List<BiomeMetaProvider.NMSBiomeMetaLink>>> data) {
         try {
             for(String biomeName : data.keySet()) {
                 if(biomeName == null) continue;
                 BiomeBase base = getBiomeBaseByName(biomeName);
                 if(base == null) continue;
 
-                Map<String, List<NMSBiomeMetaLink>> specData = data.get(biomeName);
+                Map<String, List<BiomeMetaProvider.NMSBiomeMetaLink>> specData = data.get(biomeName);
                 for(String target : specData.keySet()) {
                     if(target == null) continue;
                     EnumCreatureType type;
@@ -108,9 +110,9 @@ public class BiomeMetaProviderImpl implements BiomeMetaProvider {
         }
     }
 
-    private List<BiomeBase.BiomeMeta> getMetaList(List<NMSBiomeMetaLink> links) {
+    private List<BiomeBase.BiomeMeta> getMetaList(List<BiomeMetaProvider.NMSBiomeMetaLink> links) {
         List<BiomeBase.BiomeMeta> metas = new LinkedList<>();
-        for(NMSBiomeMetaLink link : links) {
+        for(BiomeMetaProvider.NMSBiomeMetaLink link : links) {
             if(link == null) continue;
 
             Class<? extends EntityInsentient> entityClass = getEntityTypeClass(link.entityClassStr);
@@ -122,11 +124,16 @@ public class BiomeMetaProviderImpl implements BiomeMetaProvider {
     }
 
     private BiomeBase getBiomeBaseByName(String name) {
-        for(BiomeBase base : new LinkedList<>(BiomeBase.i)) {
+		for (BiomeBase base : (Iterable<BiomeBase>) BiomeBase.i) {
             if(base == null) continue;
-            if(base.l().equalsIgnoreCase(name)) return base;
+            if(base.toString().equalsIgnoreCase(name)) return base;
         }
         return null;
     }
 
+	@Override
+	public List getBiomes() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

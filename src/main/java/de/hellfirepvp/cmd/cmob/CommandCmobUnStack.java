@@ -1,6 +1,5 @@
 package de.hellfirepvp.cmd.cmob;
 
-import com.massivecraft.factions.Lang;
 import de.hellfirepvp.CustomMobs;
 import de.hellfirepvp.cmd.BaseCommand;
 import de.hellfirepvp.cmd.MessageAssist;

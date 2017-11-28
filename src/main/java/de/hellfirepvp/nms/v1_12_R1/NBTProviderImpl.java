@@ -1,4 +1,4 @@
-package de.hellfirepvp.nms.v1_10_R1;
+package de.hellfirepvp.nms.v1_12_R1;
 
 import de.hellfirepvp.api.data.nbt.NBTTagType;
 import de.hellfirepvp.api.data.nbt.NullableIndexedElementIterator;
@@ -9,21 +9,21 @@ import de.hellfirepvp.data.nbt.base.NBTProvider;
 import de.hellfirepvp.data.nbt.base.UnmodWrappedNBTTagCompound;
 import de.hellfirepvp.data.nbt.base.UnmodWrappedNBTTagList;
 import de.hellfirepvp.nms.NMSReflector;
-import net.minecraft.server.v1_10_R1.NBTBase;
-import net.minecraft.server.v1_10_R1.NBTCompressedStreamTools;
-import net.minecraft.server.v1_10_R1.NBTTagByte;
-import net.minecraft.server.v1_10_R1.NBTTagByteArray;
-import net.minecraft.server.v1_10_R1.NBTTagCompound;
-import net.minecraft.server.v1_10_R1.NBTTagDouble;
-import net.minecraft.server.v1_10_R1.NBTTagEnd;
-import net.minecraft.server.v1_10_R1.NBTTagFloat;
-import net.minecraft.server.v1_10_R1.NBTTagInt;
-import net.minecraft.server.v1_10_R1.NBTTagIntArray;
-import net.minecraft.server.v1_10_R1.NBTTagList;
-import net.minecraft.server.v1_10_R1.NBTTagLong;
-import net.minecraft.server.v1_10_R1.NBTTagShort;
-import net.minecraft.server.v1_10_R1.NBTTagString;
-import org.bukkit.craftbukkit.v1_10_R1.inventory.CraftItemStack;
+import net.minecraft.server.v1_12_R1.NBTBase;
+import net.minecraft.server.v1_12_R1.NBTCompressedStreamTools;
+import net.minecraft.server.v1_12_R1.NBTTagByte;
+import net.minecraft.server.v1_12_R1.NBTTagByteArray;
+import net.minecraft.server.v1_12_R1.NBTTagCompound;
+import net.minecraft.server.v1_12_R1.NBTTagDouble;
+import net.minecraft.server.v1_12_R1.NBTTagEnd;
+import net.minecraft.server.v1_12_R1.NBTTagFloat;
+import net.minecraft.server.v1_12_R1.NBTTagInt;
+import net.minecraft.server.v1_12_R1.NBTTagIntArray;
+import net.minecraft.server.v1_12_R1.NBTTagList;
+import net.minecraft.server.v1_12_R1.NBTTagLong;
+import net.minecraft.server.v1_12_R1.NBTTagShort;
+import net.minecraft.server.v1_12_R1.NBTTagString;
+import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nullable;
@@ -50,9 +50,7 @@ public class NBTProviderImpl implements NBTProvider {
     @Override
     public ItemStack loadStack(WrappedNBTTagCompound savedStack) {
         if(savedStack == null) return null;
-        return CraftItemStack.asBukkitCopy(
-                net.minecraft.server.v1_10_R1.ItemStack.createStack(
-                        (NBTTagCompound) savedStack.getRawNMSTagCompound()));
+        return CraftItemStack.asBukkitCopy((net.minecraft.server.v1_12_R1.ItemStack) savedStack.getRawNMSTagCompound());
     }
 
     @Override
@@ -145,7 +143,7 @@ public class NBTProviderImpl implements NBTProvider {
 
         @Override
         public Object getElementAtIndex(int index) {
-            NBTBase element = parentList.h(index);
+            NBTBase element = parentList.i(index);
 
             Object value = extractValue(element);
             if(value != null) return value;
@@ -196,7 +194,7 @@ public class NBTProviderImpl implements NBTProvider {
         public Object next() {
             entryPointer++;
             removeCalledThisIteration = false;
-            NBTBase element = list.h(entryPointer);
+            NBTBase element = list.i(entryPointer);
             Object value = extractValue(element);
             if(value != null) return value;
 
@@ -433,7 +431,7 @@ public class NBTProviderImpl implements NBTProvider {
             case 5:
                 return ((NBTTagFloat) nbtBase).i();
             case 6:
-                return ((NBTTagDouble) nbtBase).h();
+                return ((NBTTagDouble) nbtBase).c();
             case 7:
                 return ((NBTTagByteArray) nbtBase).c();
             case 8:

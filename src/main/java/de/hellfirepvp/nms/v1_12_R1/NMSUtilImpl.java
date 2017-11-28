@@ -1,27 +1,27 @@
-package de.hellfirepvp.nms.v1_10_R1;
+package de.hellfirepvp.nms.v1_12_R1;
 
 import de.hellfirepvp.CustomMobs;
 import de.hellfirepvp.nms.NMSUtils;
 import de.hellfirepvp.spawning.worldSpawning.WorldSpawner;
 import gnu.trove.map.hash.TObjectIntHashMap;
-import net.minecraft.server.v1_10_R1.BlockPosition;
-import net.minecraft.server.v1_10_R1.Blocks;
-import net.minecraft.server.v1_10_R1.Chunk;
-import net.minecraft.server.v1_10_R1.Entity;
-import net.minecraft.server.v1_10_R1.EntityLiving;
-import net.minecraft.server.v1_10_R1.EnumCreatureType;
-import net.minecraft.server.v1_10_R1.EnumItemSlot;
-import net.minecraft.server.v1_10_R1.IBlockData;
-import net.minecraft.server.v1_10_R1.Item;
-import net.minecraft.server.v1_10_R1.ItemStack;
-import net.minecraft.server.v1_10_R1.WorldServer;
+import net.minecraft.server.v1_12_R1.BlockPosition;
+import net.minecraft.server.v1_12_R1.Blocks;
+import net.minecraft.server.v1_12_R1.Chunk;
+import net.minecraft.server.v1_12_R1.Entity;
+import net.minecraft.server.v1_12_R1.EntityLiving;
+import net.minecraft.server.v1_12_R1.EnumCreatureType;
+import net.minecraft.server.v1_12_R1.EnumItemSlot;
+import net.minecraft.server.v1_12_R1.IBlockData;
+import net.minecraft.server.v1_12_R1.Item;
+import net.minecraft.server.v1_12_R1.ItemStack;
+import net.minecraft.server.v1_12_R1.WorldServer;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.CreatureSpawner;
-import org.bukkit.craftbukkit.v1_10_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_10_R1.block.CraftCreatureSpawner;
-import org.bukkit.craftbukkit.v1_10_R1.entity.CraftLivingEntity;
+import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_12_R1.block.CraftCreatureSpawner;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftLivingEntity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.util.Vector;
 
@@ -69,10 +69,10 @@ public class NMSUtilImpl implements NMSUtils {
 
     @Override
     public byte[] getMobSpawnRangeAndViewDistance(World world) {
-        net.minecraft.server.v1_10_R1.WorldServer ws = ((CraftWorld) world).getHandle();
+        net.minecraft.server.v1_12_R1.WorldServer ws = ((CraftWorld) world).getHandle();
         if(spigotCfgField == null && isSpigot) {
             try {
-                spigotCfgField = net.minecraft.server.v1_10_R1.World.class.getDeclaredField("spigotConfig");
+                spigotCfgField = net.minecraft.server.v1_12_R1.World.class.getDeclaredField("spigotConfig");
             } catch (NoSuchFieldException e) {
                 isSpigot = false;
                 return getMobSpawnRangeAndViewDistance(world);
@@ -105,7 +105,7 @@ public class NMSUtilImpl implements NMSUtils {
     static {
 
         try {
-            entityCountField = Chunk.class.getDeclaredField("entityCount");
+            entityCountField = org.bukkit.Chunk.class.getDeclaredField("entityCount");
             entityCountField.setAccessible(true);
         } catch (Exception e) {}
 
@@ -156,7 +156,7 @@ public class NMSUtilImpl implements NMSUtils {
         }
         try {
             CraftCreatureSpawner spawner = (CraftCreatureSpawner) state;
-            spawner.getTileEntity().getSpawner().setMobName("");
+            spawner.setCreatureTypeByName("");
         } catch (Exception ignored) {}
     }
 

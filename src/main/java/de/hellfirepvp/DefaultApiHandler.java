@@ -75,12 +75,12 @@ public class DefaultApiHandler implements ApiHandler {
         if(CustomMobs.instance.getMobDataHolder().getCustomMob(name) != null) {
             return MobCreationCallback.NAME_TAKEN;
         }
-        LivingEntity created = NMSReflector.mobTypeProvider.getEntityForName(EntityAdapter.getDefaultWorld(), mobType);
-        if(MobFactory.tryCreateCustomMobFromEntity(created, name)) {
-            return MobCreationCallback.SUCCESS;
-        } else {
+//        LivingEntity created = NMSReflector.mobTypeProvider.getEntityForName(EntityAdapter.getDefaultWorld(), mobType);
+//        if(MobFactory.tryCreateCustomMobFromEntity(created, name)) {
+//            return MobCreationCallback.SUCCESS;
+//        } else {
             return MobCreationCallback.FAILED;
-        }
+//        }
     }
 
     @Override

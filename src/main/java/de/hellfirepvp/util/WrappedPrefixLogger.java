@@ -37,5 +37,9 @@ public class WrappedPrefixLogger {
     public void warning(String msg) {
         log.warning(prefix + msg);
     }
+    
+    public void exception(Exception e) {
+		e.printStackTrace();		
+	}
 
 }

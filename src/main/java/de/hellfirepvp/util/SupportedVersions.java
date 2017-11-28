@@ -11,14 +11,7 @@ import org.bukkit.event.Listener;
  * Date: 26.06.2016 / 20:39
  */
 public enum SupportedVersions {
-
-    /*V1_8_R1("v1_8_R1"),
-    V1_8_R2("v1_8_R2"),
-    V1_8_R3("v1_8_R3");*/
-
-    V1_9_R1("v1_9_R1"),
-    V1_9_R2("v1_9_R2"),
-    V1_10_R1("v1_10_R1");
+    V1_12_R1("v1_12_R1");
 
     private final String versionStr;
 
@@ -32,16 +25,8 @@ public enum SupportedVersions {
 
     public Listener getAmbiguousEventListener() {
         switch (this) {
-            /*case V1_8_R1:
-            case V1_8_R2:
-            case V1_8_R3:
-                return new AmbigousEventListenerNoOp();*/
-            case V1_9_R1:
-                return new de.hellfirepvp.event.v1_9_R1.AmbigousEventListener();
-            case V1_9_R2:
-                return new de.hellfirepvp.event.v1_9_R2.AmbigousEventListener();
-            case V1_10_R1:
-                return new de.hellfirepvp.event.v1_10_R1.AmbigousEventListener();
+            case V1_12_R1:
+                return new de.hellfirepvp.event.v1_12_R1.AmbigousEventListener();
             default:
                 break;
         }

@@ -68,11 +68,11 @@ public class CommandCmobCreate extends PlayerCmobCommand {
             BaseCommand.sendPlayerDescription(p, this, false);
             return;
         }
-        LivingEntity created = NMSReflector.mobTypeProvider.getEntityForName(p.getWorld(), typeStr);
-        if(MobFactory.tryCreateCustomMobFromEntity(created, name)) {
-            p.sendMessage(LibLanguageOutput.PREFIX + ChatColor.GREEN + String.format(LanguageHandler.translate("command.cmob.create.success"), name));
-        } else {
-            p.sendMessage(LibLanguageOutput.PREFIX + ChatColor.GREEN + String.format(LanguageHandler.translate("command.cmob.create.failed"), name));
-        }
+//        LivingEntity created = NMSReflector.mobTypeProvider.getEntityForName(p.getWorld(), typeStr);
+//        if(MobFactory.tryCreateCustomMobFromEntity(created, name)) {
+//            p.sendMessage(LibLanguageOutput.PREFIX + ChatColor.GREEN + String.format(LanguageHandler.translate("command.cmob.create.success"), name));
+//        } else {
+//            p.sendMessage(LibLanguageOutput.PREFIX + ChatColor.GREEN + String.format(LanguageHandler.translate("command.cmob.create.failed"), name));
+//        }
     }
 }

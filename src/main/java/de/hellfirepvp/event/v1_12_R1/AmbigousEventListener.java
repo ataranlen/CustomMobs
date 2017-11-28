@@ -1,4 +1,4 @@
-package de.hellfirepvp.event.v1_9_R2;
+package de.hellfirepvp.event.v1_12_R1;
 
 import de.hellfirepvp.CustomMobs;
 import de.hellfirepvp.cmd.AbstractCmobCommand;
@@ -11,7 +11,6 @@ import de.hellfirepvp.lib.LibMisc;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerChatTabCompleteEvent;
 import org.bukkit.event.server.TabCompleteEvent;
 
 import java.util.Collection;

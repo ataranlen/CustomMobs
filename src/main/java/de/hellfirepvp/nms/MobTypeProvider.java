@@ -20,7 +20,7 @@ public interface MobTypeProvider {
 
     public List<String> getTypeNames();
 
-    public LivingEntity getEntityForName(World world, String typeName);
+//    public LivingEntity getEntityForName(World world, String typeName);
 
     public LivingEntity createEntityShell(World world, WrappedNBTTagCompound data);
 

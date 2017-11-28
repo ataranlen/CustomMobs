@@ -1,21 +1,24 @@
-package de.hellfirepvp.nms.v1_9_R2;
+package de.hellfirepvp.nms.v1_12_R1;
 
 import de.hellfirepvp.CustomMobs;
 import de.hellfirepvp.api.data.nbt.WrappedNBTTagCompound;
 import de.hellfirepvp.nms.MobTypeProvider;
 import de.hellfirepvp.nms.NMSReflector;
-import net.minecraft.server.v1_9_R2.DragonControllerPhase;
-import net.minecraft.server.v1_9_R2.Entity;
-import net.minecraft.server.v1_9_R2.EntityInsentient;
-import net.minecraft.server.v1_9_R2.EntityLiving;
-import net.minecraft.server.v1_9_R2.EntityTypes;
-import net.minecraft.server.v1_9_R2.NBTTagCompound;
-import net.minecraft.server.v1_9_R2.WorldServer;
+import net.minecraft.server.v1_12_R1.DragonControllerPhase;
+import net.minecraft.server.v1_12_R1.Entity;
+import net.minecraft.server.v1_12_R1.EntityEnderDragon;
+import net.minecraft.server.v1_12_R1.EntityInsentient;
+import net.minecraft.server.v1_12_R1.EntityLiving;
+import net.minecraft.server.v1_12_R1.EntityTypes;
+import net.minecraft.server.v1_12_R1.MinecraftKey;
+import net.minecraft.server.v1_12_R1.NBTTagCompound;
+import net.minecraft.server.v1_12_R1.WorldServer;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.craftbukkit.v1_9_R2.CraftWorld;
-import org.bukkit.craftbukkit.v1_9_R2.entity.CraftEnderDragon;
-import org.bukkit.craftbukkit.v1_9_R2.entity.CraftLivingEntity;
+import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEnderDragon;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftLivingEntity;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEnderDragonPart;
 import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.entity.CreatureSpawnEvent;
@@ -33,7 +36,7 @@ import java.util.UUID;
  * The plugin can be found at: https://www.spigotmc.org/resources/custommobs.7339
  * Class: TypeProviderImpl
  * Created by HellFirePvP
- * Date: 24.05.2016 / 14:40
+ * Date: 23.06.2016 / 16:35
  */
 public class TypeProviderImpl implements MobTypeProvider {
 
@@ -43,18 +46,23 @@ public class TypeProviderImpl implements MobTypeProvider {
     public void discoverMobTypes() {
         discoveredTypes.clear();
         try {
-            Field nameToClassField = EntityTypes.class.getDeclaredField("c");
-            nameToClassField.setAccessible(true);
-            Map<String, Class> nameToClassMap = (Map<String, Class>) nameToClassField.get(null);
-            for (String s : nameToClassMap.keySet()) {
-                Class entityClass = nameToClassMap.get(s);
-                if(EntityInsentient.class.isAssignableFrom(entityClass) &&
-                        !Modifier.isAbstract(entityClass.getModifiers())) {
-                    discoveredTypes.add(s);
+        	for (Field f : EntityTypes.class.getDeclaredFields()) {
+                if (f.getType().getSimpleName().equals(Map.class.getSimpleName())) {
+                    f.setAccessible(true);
+                    Map<MinecraftKey, Class<? extends Entity>> nameToClassMap = (Map<MinecraftKey, Class<? extends Entity>>) f.get(null);
+                    for (MinecraftKey s : nameToClassMap.keySet()) {
 
-                    CustomMobs.logger.debug("Discovered mobType: " + s);
+                        Class entityClass = nameToClassMap.get(s);
+                        if(EntityInsentient.class.isAssignableFrom(entityClass) &&
+                                !Modifier.isAbstract(entityClass.getModifiers())) {
+                            discoveredTypes.add(s.toString());
+
+                            CustomMobs.logger.debug("Discovered mobType: " + s);
+                        }
+                    }
                 }
             }
+           
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -65,17 +73,17 @@ public class TypeProviderImpl implements MobTypeProvider {
         return Collections.unmodifiableList(discoveredTypes);
     }
 
-    @Override
-    public LivingEntity getEntityForName(World world, String typeName) {
-        WorldServer nmsWorld = ((CraftWorld) world).getHandle();
-        Entity e = EntityTypes.createEntityByName(typeName, nmsWorld);
-        if(e != null && EntityLiving.class.isAssignableFrom(e.getClass())) { //.isALivingEntity check.. kinda..
-            return (LivingEntity) e.getBukkitEntity();
-        } else {
-            CustomMobs.logger.info("Skipping invalid entity creation....");
-            return null;
-        }
-    }
+//    @Override
+//    public LivingEntity getEntityForName(World world, String typeName) {
+//        WorldServer ws = ((CraftWorld) world).getHandle();
+//        Entity e = EntityTypes.createEntityByName(typeName, ws);
+//        if(e != null && EntityLiving.class.isAssignableFrom(e.getClass())) { //.isALivingEntity check.. kinda..
+//            return (LivingEntity) e.getBukkitEntity();
+//        } else {
+//            CustomMobs.logger.info("Skipping invalid entity creation....");
+//            return null;
+//        }
+//    }
 
     @Override
     public LivingEntity createEntityShell(World world, WrappedNBTTagCompound data) {
@@ -107,9 +115,9 @@ public class TypeProviderImpl implements MobTypeProvider {
             return null;
         }
         LivingEntity le = (LivingEntity) e.getBukkitEntity();
-        if(le instanceof EnderDragon) {
-            CraftEnderDragon ced = (CraftEnderDragon) le;
-            ced.getHandle().getDragonControllerManager().setControllerPhase(DragonControllerPhase.a);
+        if(le instanceof EntityEnderDragon) {
+        	EntityEnderDragon dragon = (EntityEnderDragon) le;
+        	dragon.getDragonControllerManager().setControllerPhase(DragonControllerPhase.a);
         }
         return le;
     }
@@ -129,6 +137,4 @@ public class TypeProviderImpl implements MobTypeProvider {
         EntityLiving e = ((CraftLivingEntity) le).getHandle();
         e.c((NBTTagCompound) tag.getRawNMSTagCompound());
     }
-
-
 }

@@ -126,15 +126,6 @@ public class CommandCmobSpawn extends PlayerCmobCommand {
     }
 
     private Block getTargetBlock(Player p) {
-        try {
-            return p.getTargetBlock(LibMisc.TARGET_TRANSPARENT, 80);
-        } catch (Throwable tr) {
-            return p.getTargetBlock(getNullByteSet(), 80);
-        }
+        return p.getTargetBlock(LibMisc.TARGET_TRANSPARENT, 80);
     }
-
-    private HashSet<Byte> getNullByteSet() {
-        return null;
-    }
-
 }
